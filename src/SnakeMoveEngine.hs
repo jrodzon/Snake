@@ -18,11 +18,17 @@ update seconds = randomFoodPosition . selfBounce . wallBounce . moveSnake second
 moveSnake :: Float    -- ^ The number of seconds since last update
          -> SnakeGame -- ^ The initial game state
          -> SnakeGame -- ^ A new game state with an updated snake position
-moveSnake seconds game = game { snake = s' }
+moveSnake seconds game = if counter < 60 then game { fpsCounter = if length s < 15 then counter + length s else counter + 15 }
+    else game { snake = s', fpsCounter = 0 }
   where
+    -- Current state of fpsCounter.
+    counter = fpsCounter game
+
     -- Old snake and direction.
-    s = snake game
     direction = moveDirection game
+
+    -- Old snake positions.
+    s = snake game
 
     -- Current food position.
     fp = foodPosition game
@@ -31,7 +37,7 @@ moveSnake seconds game = game { snake = s' }
     newHead = getPointAfterMove direction $ head s
 
     -- New snake. If we have just eat something, we grow up.
-    s' = if twoPositionCollision fp newHead then newHead : s else init $ newHead : s
+    s' = if fp == newHead then newHead : s else init $ newHead : s
 
     -- Converts point and moveDirection to new point after move.
     getPointAfterMove :: MoveDirection -> Position -> Position
@@ -59,10 +65,10 @@ wallBounce game = if wallCollision h then error "You hit the wall." else game
 wallCollision :: Position -> Bool 
 wallCollision (x, y) = topCollision || bottomCollision || leftCollision || rightCollision
   where
-    topCollision    = y - size / 2 <= -fromIntegral height / 2 
-    bottomCollision = y + size / 2 >=  fromIntegral height / 2
-    leftCollision   = x - size / 2 <= -fromIntegral width / 2
-    rightCollision  = x + size / 2 >=  fromIntegral width / 2
+    topCollision    = y - size `quot` 2 <= -height `quot` 2 
+    bottomCollision = y + size `quot` 2 >=  height `quot` 2
+    leftCollision   = x - size `quot` 2 <= -width `quot` 2
+    rightCollision  = x + size `quot` 2 >=  width `quot` 2
 
 -- | Given snake return whether a collision occurred.
 selfCollision :: [Position] -> Bool 
@@ -71,21 +77,33 @@ selfCollision (x:xs) = iterateOverSnake x xs
     -- Iterates over tail of the snake and find for collision.
     iterateOverSnake :: Position -> [Position] -> Bool
     iterateOverSnake _ [] = False
-    iterateOverSnake p (y:ys) = if twoPositionCollision p y then True else False || iterateOverSnake p ys
+    iterateOverSnake p (y:ys) = if p == y then True else False || iterateOverSnake p ys
 
--- | Check if 2 positions are not too close.
-twoPositionCollision :: Position -> Position -> Bool
-twoPositionCollision (x1, y1) (x2, y2) = if abs (x1 - x2) < size / 2 && abs (y1 - y2) < size / 2 then True else False
 
 -- | Respond to key events.
 handleKeys :: Event -> SnakeGame -> SnakeGame
 
 -- For an arrows keypress, set moveDirection into proper direction.
 handleKeys (EventKey (SpecialKey arrow) Down _ _) game = case arrow of
-    KeyUp -> if moveDirection game == Downn then game else game { moveDirection = Upp }
-    KeyDown -> if moveDirection game == Upp then game else game { moveDirection = Downn }
-    KeyLeft -> if moveDirection game == Rightt then game else game { moveDirection = Leftt }
-    KeyRight -> if moveDirection game == Leftt then game else game { moveDirection = Rightt }
+    KeyUp -> if Upp == bannedMoveDirection then game else game { moveDirection = Upp }
+    KeyDown -> if Downn == bannedMoveDirection then game else game { moveDirection = Downn }
+    KeyLeft -> if Leftt == bannedMoveDirection then game else game { moveDirection = Leftt }
+    KeyRight -> if Rightt == bannedMoveDirection then game else game { moveDirection = Rightt }
+    where
+        -- Positions of snake on the map.
+        snakePositions = snake game
+
+        -- Move direction which will wipe out your game.
+        bannedMoveDirection = convertPositionsToMoveDirection (snakePositions !! 1) (head snakePositions)
 
 -- Do nothing for all other events.
 handleKeys _ game = game
+
+-- Convert 2 points into move direction.
+convertPositionsToMoveDirection :: Position -> Position -> MoveDirection
+convertPositionsToMoveDirection (x1, y1) (x2, y2)
+    | x1 == x2 + size && y1 == y2 = Rightt
+    | x1 == x2 - size && y1 == y2 = Leftt
+    | x1 == x2 && y1 == y2 + size = Upp
+    | x1 == x2 && y1 == y2 - size = Downn
+    | otherwise = error "Faile with converting 2 points into move direction."

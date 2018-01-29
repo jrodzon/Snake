@@ -2,13 +2,13 @@ module SnakeRandomGenerator
     ( randomFoodPosition
     ) where
 
-import Data.Fixed
+import System.Random
 
 import SnakeGameState
 
 -- | Modify food position if food is consumped.
 randomFoodPosition :: SnakeGame -> SnakeGame
-randomFoodPosition game = if twoPositionCollision fp h then game' { foodPosition = fp'} else game
+randomFoodPosition game = if fp == h then game { foodPosition = fp', generator = snd randomPair} else game
     where
         -- Current food position.
         fp = foodPosition game
@@ -16,31 +16,32 @@ randomFoodPosition game = if twoPositionCollision fp h then game' { foodPosition
         -- Current head of the snake.
         h = head $ snake game
 
-        -- New food position if needed
-        fp' = setNewRandomFoodPosition (fp'x, fp'y)
+        -- List of possible positions for new food.
+        emptyPositionsList = getEmptyPositionsList game
 
-        game' = newSeed game
-        
-        fp'x :: Float
-        fp'y :: Float
+        -- New food position if needed.
+        fp' = getNewFoodPosition emptyPositionsList (fst randomPair)
 
-        fp'x = getRandom game' (-fromIntegral width / 2 + size, fromIntegral width / 2 - size)
-        fp'y = getRandom game' (-fromIntegral height / 2 + size, fromIntegral height / 2 - size)
+        -- Pair of random number and new random generator returned by the funcion.
+        randomPair = randomR (0, (length emptyPositionsList) - 1) (generator game)
 
-        setNewRandomFoodPosition :: Position -> Position
-        setNewRandomFoodPosition (x, y) = (fromIntegral $ ceiling x,fromIntegral $ ceiling y)
+-- Return random position. Got list of possible positions and random number in scope.
+getNewFoodPosition :: [Position] -> Int -> Position
+getNewFoodPosition [] _ = error "Your snake is too big for this map. You are a vanquisher :)"
+getNewFoodPosition list i = if length list - 1 < i then error "Fatal error, length of given list is shorter then index to read." else list !! i
 
--- | Generate new seed used to create new random.
-newSeed :: SnakeGame -> SnakeGame
-newSeed game = game { seed = (mod') (1103515245 * oldSeed + 12345) (2^32) }
-            where
-                oldSeed = seed game
+-- Create a list of empty positions on the map.
+getEmptyPositionsList :: SnakeGame -> [Position]
+getEmptyPositionsList game = [t | t <- getMapPositionsList, not $ elem t (snake game)]
 
-getRandom :: SnakeGame -> Position -> Float
-getRandom game (min, max) = (mod') newSeed (max - min) + min
-    where
-    newSeed = seed game
+-- Return list of positions on the map.
+getMapPositionsList :: [Position]
+getMapPositionsList = [(x, y) | x <- getRowXList, y <- getColumnYList]
 
--- | Check if 2 positions are not too close.
-twoPositionCollision :: Position -> Position -> Bool
-twoPositionCollision (x1, y1) (x2, y2) = if abs (x1 - x2) < size / 2 && abs (y1 - y2) < size / 2 then True else False
+-- Return list of x coordinates of full row of the map.
+getRowXList :: [Int]
+getRowXList = [-width `quot` 2 + size, -width `quot` 2 + 2 * size .. width `quot` 2 - size]
+
+-- Return list of y coordinates of full column of the map.
+getColumnYList :: [Int]
+getColumnYList = [-height `quot` 2 + size, -height `quot` 2 + 2 * size .. height `quot` 2 - size]
