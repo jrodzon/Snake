@@ -13,6 +13,7 @@ module SnakeGameState
 import Graphics.Gloss
 import System.Random
 
+-- | Datatype alias to better represent position on map.
 type Position = (Int, Int)
 
 -- | Data representing current move direction of the snake.
@@ -29,7 +30,8 @@ data SnakeGame = Game
   } deriving Show
 
 -- | Initialize the game with this game state.
-initialState :: StdGen -> SnakeGame   -- ^ Initial state of the game.
+initialState :: StdGen  -- ^ New generator used to generate food position.
+                -> SnakeGame   -- ^ Initial state of the game.
 initialState gen = Game
   { snake = [(0,size), (0,0)]
   , foodPosition = (size, (-3)*size)
@@ -38,7 +40,7 @@ initialState gen = Game
   , fpsCounter = 0
   }
 
-
+-- | Window and map parameters.
 width, height, offset :: Int
 width = 400
 height = 400

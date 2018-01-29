@@ -23,6 +23,8 @@ dependencies:
 - base >= 4.7 && < 5
 - gloss==1.11.*
 - random
+- QuickCheck
+- HUnit
 
 library:
   source-dirs: src

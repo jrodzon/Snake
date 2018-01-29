@@ -11,7 +11,9 @@ import SnakeGameState
 import SnakeRandomGenerator
 
 -- | Update the game by moving the snake and react properly to a situation.
-update :: Float -> SnakeGame -> SnakeGame
+update :: Float -- ^ Number of seconds sincle last update.
+        -> SnakeGame    -- ^ Game state before updating all game data.
+        -> SnakeGame    -- ^ Game state after updating game data such as snake move, direction etc.
 update seconds = randomFoodPosition . selfBounce . wallBounce . moveSnake seconds
 
 -- | Update the snake position using its current moveDirection.
@@ -81,7 +83,9 @@ selfCollision (x:xs) = iterateOverSnake x xs
 
 
 -- | Respond to key events.
-handleKeys :: Event -> SnakeGame -> SnakeGame
+handleKeys :: Event -- ^ Event given by the gloss library. It describes which key was pressed.
+            -> SnakeGame    -- ^ Game state before updating state.
+            -> SnakeGame    -- ^ Game state after updating state depends on given key event.
 
 -- For an arrows keypress, set moveDirection into proper direction.
 handleKeys (EventKey (SpecialKey arrow) Down _ _) game = case arrow of

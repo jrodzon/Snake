@@ -1,13 +1,12 @@
-module SnakeRandomGenerator
-    ( randomFoodPosition
-    ) where
+module SnakeRandomGenerator ( randomFoodPosition ) where
 
 import System.Random
 
 import SnakeGameState
 
 -- | Modify food position if food is consumped.
-randomFoodPosition :: SnakeGame -> SnakeGame
+randomFoodPosition :: SnakeGame -- ^ State of the game before checking food position.
+                    -> SnakeGame    -- ^ State of the game after checking and if necessary changing food position.
 randomFoodPosition game = if fp == h then game { foodPosition = fp', generator = snd randomPair} else game
     where
         -- Current food position.
