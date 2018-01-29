@@ -1,4 +1,4 @@
-module SnakeRandomGenerator ( randomFoodPosition ) where
+module SnakeRandomGenerator ( randomFoodPosition, getMapPositionsList ) where
 
 import System.Random
 

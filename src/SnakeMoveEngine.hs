@@ -1,6 +1,8 @@
 module SnakeMoveEngine
     ( update
     , handleKeys
+    , convertPositionsToMoveDirection
+    , getOppositeMoveDirection
     ) where
 
 import Graphics.Gloss
@@ -111,3 +113,11 @@ convertPositionsToMoveDirection (x1, y1) (x2, y2)
     | x1 == x2 && y1 == y2 + size = Upp
     | x1 == x2 && y1 == y2 - size = Downn
     | otherwise = error "Faile with converting 2 points into move direction."
+
+-- Get opposite move direction, as name suggests.
+getOppositeMoveDirection :: MoveDirection -> MoveDirection
+getOppositeMoveDirection x = case x of
+    Leftt -> Rightt
+    Rightt -> Leftt
+    Upp -> Downn
+    Downn -> Upp
