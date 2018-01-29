@@ -35,7 +35,7 @@ initialState = Game
   , seed = 123456789
   }
 
-
+-- | Parameters of the field and window.
 width, height, offset :: Int
 width = 400
 height = 400
