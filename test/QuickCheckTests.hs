@@ -27,6 +27,6 @@ checkVertical (x, y) = convertPositionsToMoveDirection (x, y) (x + size, y) == g
 prop_GetOppositeMoveDirection :: MoveDirection -> Bool
 prop_GetOppositeMoveDirection x = getOppositeMoveDirection (getOppositeMoveDirection x) == x
 
-quickChecks = do
+quickCheckTests = do
     quickCheck prop_GetOppositeMoveDirection
     quickCheck prop_ConvertPositionsToMoveDirection

@@ -5,60 +5,60 @@ import SnakeMoveEngine
 import SnakeGameState
 
 testGetOppositeMoveDirectionRight :: Test
-testGetOppositeMoveDirection = 
+testGetOppositeMoveDirectionRight = 
   TestCase $ assertEqual
     "Function getOppositeMoveDirection does not work properly."
     Leftt
     (getOppositeMoveDirection Rightt)
 
 testGetOppositeMoveDirectionLeft :: Test
-testGetOppositeMoveDirection = 
+testGetOppositeMoveDirectionLeft = 
   TestCase $ assertEqual
     "Function getOppositeMoveDirection does not work properly."
     Rightt
     (getOppositeMoveDirection Leftt)
   
 testGetOppositeMoveDirectionUp :: Test
-testGetOppositeMoveDirection = 
+testGetOppositeMoveDirectionUp = 
   TestCase $ assertEqual
     "Function getOppositeMoveDirection does not work properly."
     Upp
     (getOppositeMoveDirection Downn)
 
 testGetOppositeMoveDirectionDown :: Test
-testGetOppositeMoveDirection = 
+testGetOppositeMoveDirectionDown = 
   TestCase $ assertEqual
     "Function getOppositeMoveDirection does not work properly."
     Downn
     (getOppositeMoveDirection Upp)
 
 testConvertPositionsToMoveDirectionRight :: Test
-testConvertPositionsToMoveDirection = 
+testConvertPositionsToMoveDirectionRight = 
   TestCase $ assertEqual
-    "Function convertpositionsToMoveDirection does not work properly."
+    "Function convertPositionsToMoveDirection does not work properly."
     Rightt
-    (convertpositionsToMoveDirection (10, 10) (20, 10))
+    (convertPositionsToMoveDirection (10, 10) (20, 10))
 
 testConvertPositionsToMoveDirectionLeft :: Test
-testConvertPositionsToMoveDirection = 
+testConvertPositionsToMoveDirectionLeft = 
   TestCase $ assertEqual
-    "Function convertpositionsToMoveDirection does not work properly."
+    "Function convertPositionsToMoveDirection does not work properly."
     Leftt
-    (convertpositionsToMoveDirection (10, 10) (0, 10))
+    (convertPositionsToMoveDirection (10, 10) (0, 10))
 
 testConvertPositionsToMoveDirectionUp :: Test
-testConvertPositionsToMoveDirection = 
+testConvertPositionsToMoveDirectionUp = 
   TestCase $ assertEqual
-    "Function convertpositionsToMoveDirection does not work properly."
+    "Function convertPositionsToMoveDirection does not work properly."
     Upp
-    (convertpositionsToMoveDirection (10, 10) (10, 20))
+    (convertPositionsToMoveDirection (10, 10) (10, 20))
 
 testConvertPositionsToMoveDirectionDown :: Test
-testConvertPositionsToMoveDirection = 
+testConvertPositionsToMoveDirectionDown = 
   TestCase $ assertEqual
-    "Function convertpositionsToMoveDirection does not work properly."
+    "Function convertPositionsToMoveDirection does not work properly."
     Downn
-    (convertpositionsToMoveDirection (10, 0) (10, 10))
+    (convertPositionsToMoveDirection (10, 10) (10, 0))
 
 tests :: Test
 tests = TestList [

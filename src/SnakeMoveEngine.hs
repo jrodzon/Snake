@@ -100,7 +100,7 @@ handleKeys (EventKey (SpecialKey arrow) Down _ _) game = case arrow of
         snakePositions = snake game
 
         -- Move direction which will wipe out your game.
-        bannedMoveDirection = convertPositionsToMoveDirection (snakePositions !! 1) (head snakePositions)
+        bannedMoveDirection = getOppositeMoveDirection $ convertPositionsToMoveDirection (snakePositions !! 1) (head snakePositions)
 
 -- Do nothing for all other events.
 handleKeys _ game = game
@@ -108,10 +108,10 @@ handleKeys _ game = game
 -- Convert 2 points into move direction.
 convertPositionsToMoveDirection :: Position -> Position -> MoveDirection
 convertPositionsToMoveDirection (x1, y1) (x2, y2)
-    | x1 == x2 + size && y1 == y2 = Rightt
-    | x1 == x2 - size && y1 == y2 = Leftt
-    | x1 == x2 && y1 == y2 + size = Upp
-    | x1 == x2 && y1 == y2 - size = Downn
+    | x1 == x2 + size && y1 == y2 = Leftt
+    | x1 == x2 - size && y1 == y2 = Rightt
+    | x1 == x2 && y1 == y2 + size = Downn
+    | x1 == x2 && y1 == y2 - size = Upp
     | otherwise = error "Faile with converting 2 points into move direction."
 
 -- Get opposite move direction, as name suggests.
