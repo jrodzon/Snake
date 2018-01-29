@@ -11,10 +11,6 @@ instance Arbitrary MoveDirection where
     x <- arbitrary
     return $ [Leftt, Rightt, Upp, Downn] !! (x `mod` 4)
 
--- List which will be used to generate possible moves.
-specialList :: [Int]
-specialList = [-width `quot` 2 + size, -width `quot` 2 .. width `quot` 2 - 2 * size]
-
 prop_ConvertPositionsToMoveDirection :: Position -> Bool
 prop_ConvertPositionsToMoveDirection (x, y) = checkHorizontal (x * size, y * size) && checkVertical (x * size, y * size)
 

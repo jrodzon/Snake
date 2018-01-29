@@ -1,4 +1,15 @@
-module SnakeRandomGenerator ( randomFoodPosition, getMapPositionsList ) where
+{-|
+Module      : SnakeRandomGenerator
+Description : Module is responsible for finding new place for food.
+Copyright   : Copyright (c) 2017, Jakub Kołoczek & Jan Rodzoń
+License     : MIT
+Maintainer  : rodzonjan@wp.pl
+Stability   : experimental
+Portability : portable
+The most important function here is randomFoodPositions. It generate list of empty positions of map and then choose random position from generated list.
+-}
+
+module SnakeRandomGenerator ( randomFoodPosition ) where
 
 import System.Random
 

@@ -1,3 +1,14 @@
+{-|
+Module      : SnakeMoveEngine
+Description : Module is responsible for moving snake.
+Copyright   : Copyright (c) 2017, Jakub Kołoczek & Jan Rodzoń
+License     : MIT
+Maintainer  : rodzonjan@wp.pl
+Stability   : experimental
+Portability : portable
+Main function here is update. It check if snake hit himself or the walls. It also resp new positions for food.
+-}
+
 module SnakeMoveEngine
     ( update
     , handleKeys
@@ -100,13 +111,16 @@ handleKeys (EventKey (SpecialKey arrow) Down _ _) game = case arrow of
         snakePositions = snake game
 
         -- Move direction which will wipe out your game.
-        bannedMoveDirection = getOppositeMoveDirection $ convertPositionsToMoveDirection (snakePositions !! 1) (head snakePositions)
+        bannedMoveDirection = getOppositeMoveDirection $
+         convertPositionsToMoveDirection (snakePositions !! 1) (head snakePositions)
 
 -- Do nothing for all other events.
 handleKeys _ game = game
 
--- Convert 2 points into move direction.
-convertPositionsToMoveDirection :: Position -> Position -> MoveDirection
+-- | Convert 2 positions into move direction.
+convertPositionsToMoveDirection :: Position -- ^ First position.
+                                -> Position -- ^ Second position.
+                                -> MoveDirection    -- ^ Direction from first position to second position.
 convertPositionsToMoveDirection (x1, y1) (x2, y2)
     | x1 == x2 + size && y1 == y2 = Leftt
     | x1 == x2 - size && y1 == y2 = Rightt
@@ -114,8 +128,9 @@ convertPositionsToMoveDirection (x1, y1) (x2, y2)
     | x1 == x2 && y1 == y2 - size = Upp
     | otherwise = error "Faile with converting 2 points into move direction."
 
--- Get opposite move direction, as name suggests.
-getOppositeMoveDirection :: MoveDirection -> MoveDirection
+-- | Get opposite move direction, as name suggests.
+getOppositeMoveDirection :: MoveDirection   -- ^ Given move direction.
+                        -> MoveDirection    -- ^ Opposite move direction.
 getOppositeMoveDirection x = case x of
     Leftt -> Rightt
     Rightt -> Leftt

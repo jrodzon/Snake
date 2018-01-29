@@ -1,3 +1,14 @@
+{-|
+Module      : SnakeGameState
+Description : Module is responsible for saving current game state. It also cover transforming current state into a picture.
+Copyright   : Copyright (c) 2017, Jakub Kołoczek & Jan Rodzoń
+License     : MIT
+Maintainer  : rodzonjan@wp.pl
+Stability   : experimental
+Portability : portable
+The most important function here is render. It transforms current game state into a picture which is then printed on the screen. There also is initalState function, which set starting game state.
+-}
+
 module SnakeGameState
     ( Position
     , MoveDirection (..)
