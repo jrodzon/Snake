@@ -1,6 +1,8 @@
 module SnakeMoveEngine
     ( update
     , handleKeys
+    , convertPositionsToMoveDirection
+    , getOppositeMoveDirection
     ) where
 
 import Graphics.Gloss
@@ -11,7 +13,9 @@ import SnakeGameState
 import SnakeRandomGenerator
 
 -- | Update the game by moving the snake and react properly to a situation.
-update :: Float -> SnakeGame -> SnakeGame
+update :: Float -- ^ Number of seconds sincle last update.
+        -> SnakeGame    -- ^ Game state before updating all game data.
+        -> SnakeGame    -- ^ Game state after updating game data such as snake move, direction etc.
 update seconds = randomFoodPosition . selfBounce . wallBounce . moveSnake seconds
 
 -- | Update the snake position using its current moveDirection.
@@ -81,7 +85,9 @@ selfCollision (x:xs) = iterateOverSnake x xs
 
 
 -- | Respond to key events.
-handleKeys :: Event -> SnakeGame -> SnakeGame
+handleKeys :: Event -- ^ Event given by the gloss library. It describes which key was pressed.
+            -> SnakeGame    -- ^ Game state before updating state.
+            -> SnakeGame    -- ^ Game state after updating state depends on given key event.
 
 -- For an arrows keypress, set moveDirection into proper direction.
 handleKeys (EventKey (SpecialKey arrow) Down _ _) game = case arrow of
@@ -107,3 +113,11 @@ convertPositionsToMoveDirection (x1, y1) (x2, y2)
     | x1 == x2 && y1 == y2 + size = Upp
     | x1 == x2 && y1 == y2 - size = Downn
     | otherwise = error "Faile with converting 2 points into move direction."
+
+-- Get opposite move direction, as name suggests.
+getOppositeMoveDirection :: MoveDirection -> MoveDirection
+getOppositeMoveDirection x = case x of
+    Leftt -> Rightt
+    Rightt -> Leftt
+    Upp -> Downn
+    Downn -> Upp
