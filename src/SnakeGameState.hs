@@ -1,7 +1,7 @@
 {-|
 Module      : SnakeGameState
 Description : Module is responsible for saving current game state. It also cover transforming current state into a picture.
-Copyright   : Copyright (c) 2017, Jakub Kołoczek & Jan Rodzoń
+Copyright   : Copyright (c) 2025, Jan Rodzoń
 License     : MIT
 Maintainer  : rodzonjan@wp.pl
 Stability   : experimental
@@ -53,13 +53,13 @@ initialState gen = Game
 
 -- | Window and map parameters.
 width, height, offset :: Int
-width = 400
-height = 400
+width = 1200
+height = 800
 offset = 100
 
 -- | Size of snake, walls and food.
 size :: Int
-size = 10
+size = 20
 
 -- | Draw a snake game state (convert it to a picture).
 render :: SnakeGame  -- ^ The game state to render.
@@ -75,17 +75,17 @@ render game =
     horizontalWall offset =
       translate 0 (fromIntegral offset) $
         color wallColor $
-          rectangleSolid 400 (fromIntegral size)
+          rectangleSolid (fromIntegral width) (fromIntegral size)
 
     -- The left and right walls.
     verticalWall :: Int -> Picture
     verticalWall offset =
         translate (fromIntegral offset) 0 $
         color wallColor $
-            rectangleSolid (fromIntegral size) 400
+            rectangleSolid (fromIntegral size) (fromIntegral height)
 
     wallColor = greyN 0.5
-    walls = pictures [verticalWall 200, verticalWall (-200), horizontalWall 200, horizontalWall (-200)]
+    walls = pictures [verticalWall (width `div` 2), verticalWall (- width `div` 2), horizontalWall (height `div` 2), horizontalWall (-height `div` 2)]
 
     -- Prepared picture of the food.
     foodPicture :: Picture
