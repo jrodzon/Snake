@@ -1,3 +1,52 @@
+# Cabal build artifacts
+dist/
+dist-newstyle/
+cabal-dev/
+*.o
+*.hi
+*.chi
+*.chs.h
+*.dyn_o
+*.dyn_hi
+*.hpc
+*.prof
+*.aux
+*.hp
+*.eventlog
+*.cabal
+.cabal-sandbox/
+cabal.sandbox.config
+*.cabal
+
+# GHC
+.ghc.environment.*
+
+# Stack (legacy - keeping for reference)
 .stack-work/
-snake.cabal
+
+# Editor and OS files
 *~
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*#
+.#*
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Backup files
+*.bak
+*.backup
+
+# Generated files
+Paths_*.hs
+Setup.hs

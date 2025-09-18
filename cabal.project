@@ -1,0 +1,27 @@
+-- Cabal project file for Snake game
+-- This file configures the Cabal build system
+
+-- Use the default package database
+packages: .
+
+-- Compiler constraints
+constraints: base >=4.7 && <5
+
+-- Allow newer dependencies if needed
+allow-newer: base
+
+-- Build configuration
+build-summary: dist-newstyle/build-summary.log
+build-log: dist-newstyle/build.log
+
+-- Test configuration
+tests: True
+
+-- Benchmark configuration  
+benchmarks: False
+
+-- Documentation
+documentation: False
+
+-- Verbose output
+verbose: normal
